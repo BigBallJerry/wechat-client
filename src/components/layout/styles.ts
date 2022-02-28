@@ -4,23 +4,28 @@ export const Container = styled.div`
   text-align: center;
   display: flex;
   flex-direction: column;
-  color: #000133;
-  width: 1200px;
-  height: 900px;
-  background: #ffeeff;
+  font-family: 'Open Sans', sans-serif;
+  color: #fff;
+  min-height: 100vh;
 `;
 
 export const Content = styled.div`
   display: flex;
   flex: 1;
-  flex-direction: column;
+  justify-content: center;
+  margin: 30px;
 `;
 
 export const PageContainer = styled.div`
-  padding: 20px;
-  width: 80vw;
+  width: 70rem;
+  height: 60rem;
+  max-height: 60rem;
+  max-width: 70rem;
   display: flex;
   flex-direction: row;
+  position: relative;
+
+  /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
 `;
 
 export const Footer = styled.div``;

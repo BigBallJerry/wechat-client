@@ -3,13 +3,14 @@ import { Container, Content, PageContainer } from './styles';
 
 type Props = {
   title?: string;
+  backgroundColor?: string;
 };
 
-export const WeChatLayout: React.FunctionComponent<Props> = ({ children, title = 'This is the default title' }) => (
+export const WeChatLayout: React.FunctionComponent<Props> = ({ children }) => (
   <Container>
-    {/* <Header title={title} /> */}
+    {/* <Header /> */}
     <Content>
-      <PageContainer>{children}</PageContainer>
+      <PageContainer className='PageContainer'>{children}</PageContainer>
     </Content>
   </Container>
 );

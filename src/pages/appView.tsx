@@ -1,36 +1,82 @@
-import { WeChatLayout } from '../components/layout/WeChatLayout';
+import { useState, useRef } from 'react';
+import { Grid, Cell } from 'styled-css-grid';
+import styled from 'styled-components';
 import { Sidebar } from '../components/sidebar/Sidebar';
-import { UserPanel } from '../components/userPanel/UserPanel';
+import { RoomPanel } from '../components/roomPanel/RoomPanel';
 import { ChatPanel } from '../components/chatPanel/ChatPanel';
 import { WindowToolbar } from '../components/windowToolbar/WindowToolbar';
-import styled from 'styled-components';
+import log from '../utils/logger';
 
 const LeftContainer = styled.div`
-  position: relative;
-  width: 30rem;
+  width: 35%;
+  height: 100%;
   margin-right: -30rem;
   float: right;
 `;
 const RightContainer = styled.div`
   float: right;
-  width: 100%;
+  width: 65%;
+  height: 100%;
   margin-left: 30rem;
   clear: both;
   overflow: auto;
   min-height: 600px;
 `;
 
+const LoginForm = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 export const AppView = () => {
+  const usernameRef = useRef(null);
+  const [username, setUsername] = useState('user');
+
+  const handleSetUsername = () => {
+    const value = usernameRef.current.value;
+
+    if (!value) {
+      return;
+    }
+
+    setUsername(value);
+    localStorage.setItem('username', value);
+  };
+
+  let date: Date = new Date();
+
+  const [userInfo, setUserInfo] = useState({
+    username: 'BigBallJerry',
+    socketId: 'zRQ3PKd2pNG9YBd-AABV',
+    avatar:
+      'https://avataaars.io/?avatarStyle=Circle&topType=LongHairFroBand&accessoriesType=Sunglasses&hairColor=Black&facialHairType=MoustacheFancy&facialHairColor=Blonde&clotheType=CollarSweater&clotheColor=Gray01&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light',
+    password: '123456',
+    confirmationToken: null,
+    createdAt: date,
+  });
+
   return (
-    <WeChatLayout title='WeChat Test'>
-      <WindowToolbar />
-      <LeftContainer>
-        <Sidebar />
-        <UserPanel />
-      </LeftContainer>
-      <RightContainer>
-        <ChatPanel />
-      </RightContainer>
-    </WeChatLayout>
+    <>
+      {username && (
+        <>
+          <WindowToolbar />
+          <LeftContainer>
+            <Grid columns={5} gap='0px' height='100%'>
+              <Cell width={1}>
+                <Sidebar username={userInfo.username} avatar={userInfo.avatar} badge={20} />
+              </Cell>
+              <Cell width={4}>
+                <RoomPanel />
+              </Cell>
+            </Grid>
+          </LeftContainer>
+          <RightContainer>
+            <ChatPanel />
+          </RightContainer>
+        </>
+      )}
+    </>
   );
 };

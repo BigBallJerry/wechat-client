@@ -17,16 +17,34 @@ export const MinimizeIcon = styled(Minimize)`
   color: black;
   font-size: 10px;
   margin-right: 10px;
+  cursor: pointer;
+  outline: none;
 `;
 
 export const MaximizeIcon = styled(Maximize)`
   color: black;
   font-size: 10px;
   margin-right: 10px;
+  cursor: pointer;
+  outline: none;
 `;
 
 export const CloseIcon = styled(Close)`
   color: black;
   font-size: 10px;
   margin-right: 10px;
+  cursor: pointer;
+  outline: none;
+`;
+
+export const ToolItem = styled.div`
+  width: 100%;
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  background: transparent;
 `;

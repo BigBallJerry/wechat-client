@@ -1,15 +1,12 @@
-import React from 'react';
+import { useEffect } from 'react';
 import { AppProps } from 'next/app';
-import '../styles/index.css';
-import { Provider } from 'react-redux';
-import { createStore, combineReducers } from 'redux';
-import appReducer from '../redux/appSlice';
-import authReducer from '../redux/authSlice';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { WeChatLayout } from '../components/layout/WeChatLayout';
-
-const rootReducer = combineReducers({ auth: authReducer, app: appReducer });
-const store = createStore(rootReducer);
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth, db } from '../firebaseConfig';
+import Login from './login';
+import Loading from './loading';
+import firebase from 'firebase/compat/app';
 
 const GlobalStyle = createGlobalStyle`
 html{
@@ -35,18 +32,37 @@ const theme = {
   colors: {
     primary: '#fafafa',
   },
+  defaultAvatar: '',
 };
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
+  const [user, loading] = useAuthState(auth);
+
+  useEffect(() => {
+    if (user) {
+      db.collection('users').doc(user.uid).set(
+        {
+          email: user.email,
+          lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
+          photoUrl: user.photoURL,
+          name: user.displayName,
+        },
+        { merge: true }
+      );
+    }
+  }, [user]);
+
+  if (loading) return <Loading />;
+
+  if (!user) return <Login />;
+
   return (
     <>
-      <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          <WeChatLayout>
-            <Component {...pageProps} />
-          </WeChatLayout>
-        </ThemeProvider>
-      </Provider>
+      <ThemeProvider theme={theme}>
+        <WeChatLayout>
+          <Component {...pageProps} />
+        </WeChatLayout>
+      </ThemeProvider>
     </>
   );
 };

@@ -1,9 +1,68 @@
-import { SidebarContainer, UserInfo, ControlPanel } from './styles';
+import {
+  SidebarContainer,
+  UserPanel,
+  ControlPanel,
+  Avatar,
+  ToolItem,
+  MessagesIcon,
+  Badge,
+  UsersIcon,
+  ThemeIcon,
+} from './styles';
+import dynamic from 'next/dynamic';
+import { auth } from '../../firebaseConfig';
 
-export const Sidebar = () => {
+const ReactTooltip = dynamic(() => import('react-tooltip'), {
+  ssr: false,
+});
+
+type SidebarProps = {
+  username: string;
+  avatar: string | null;
+  badge: number | null;
+};
+
+export const Sidebar = ({ avatar, badge }: SidebarProps) => {
+  const handleMessageClick = () => {
+    console.log('handleMessageClick');
+  };
+
+  const handleUserClick = () => {
+    console.log('handleMessageClick');
+  };
+
+  const handleThemeClick = () => {
+    console.log('handleMessageClick');
+  };
+
+  const handleAvatarClick = () => {
+    auth.signOut();
+  };
+
   return (
     <SidebarContainer>
-      <UserInfo>Sidebar</UserInfo>
+      <UserPanel>
+        <Avatar src={avatar} onClick={handleAvatarClick}></Avatar>
+        <ToolItem onClick={() => handleMessageClick()}>
+          <MessagesIcon size='25' data-tip data-for='messageTip' />
+          {badge && <Badge>{badge}</Badge>}
+          <ReactTooltip id='messageTip' place='right' effect='solid' type='info'>
+            Chats
+          </ReactTooltip>
+        </ToolItem>
+        <ToolItem onClick={() => handleUserClick()}>
+          <UsersIcon size='25' data-tip data-for='userTip' />
+          <ReactTooltip id='userTip' place='right' effect='solid' type='info'>
+            Users
+          </ReactTooltip>
+        </ToolItem>
+        <ToolItem onClick={() => handleThemeClick()}>
+          <ThemeIcon size='25' data-tip data-for='themeTip' />
+          <ReactTooltip id='themeTip' place='right' effect='solid' type='info'>
+            Themes
+          </ReactTooltip>
+        </ToolItem>
+      </UserPanel>
       <ControlPanel></ControlPanel>
     </SidebarContainer>
   );

@@ -10,7 +10,7 @@ export const WeChatLayout: React.FunctionComponent<Props> = ({ children }) => (
   <Container>
     {/* <Header /> */}
     <Content>
-      <PageContainer className='PageContainer'>{children}</PageContainer>
+      <PageContainer className='PageContainer_1'>{children}</PageContainer>
     </Content>
   </Container>
 );

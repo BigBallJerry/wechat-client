@@ -6,7 +6,6 @@ export const Container = styled.div`
   flex-direction: column;
   font-family: 'Open Sans', sans-serif;
   color: black;
-  min-height: 100vh;
 `;
 
 export const Content = styled.div`
@@ -14,6 +13,7 @@ export const Content = styled.div`
   flex: 1;
   justify-content: center;
   margin: 30px;
+  overflow: none;
 `;
 
 export const PageContainer = styled.div`

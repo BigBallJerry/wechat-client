@@ -11,9 +11,9 @@ export const Header = styled.div`
   height: 60px;
   max-height: 60px;
   width: 100%;
-  background-color: #f5f5f5;
-  border-bottom: 1px solid #e7e7e7;
-  border-left: 1px solid #d6d6d6;
+  background-color: ${(props) => props.theme.colors.chatHeader.backgroundColor};
+  border-bottom: 1px solid ${(props) => props.theme.colors.chatHeader.borderBottomColor};
+  border-left: 1px solid ${(props) => props.theme.colors.chatHeader.borderLeftColor};
   text-align: left;
   color: black;
   display: flex;
@@ -26,18 +26,28 @@ export const Header = styled.div`
   user-select: none;
 `;
 
-export const MessageContainer = styled('div')<{ bgImageUrl: string }>`
+export const MessageContainer = styled('div')<{ bgImageUrl: string; bgColor?: string | null }>`
   height: 60%;
   display: flex;
   height: 400px;
   padding: 1rem;
-  background-color: #f5f5f5;
   flex-direction: column-reverse;
-  overflow-y: auto;
+
+  /* 
   background-image: url(${(props) => props.bgImageUrl});
   background-repeat: no-repeat, no-repeat;
   background-position: right, left;
   background-size: cover;
+   */
+
+  background-color: ${(props) => (props.bgColor ? props.bgColor : props.theme.colors.chatPanelColor)};
+
+  ::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 `;
 
 export const ChatTitle = styled.p`

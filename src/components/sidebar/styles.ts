@@ -31,10 +31,11 @@ export const ControlPanel = styled.div``;
 export const Avatar = styled.img`
   display: block;
   border: none;
-  width: 80%;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
   cursor: pointer;
-  margin: 10px 0;
+  margin: 1rem 0;
 `;
 
 export const ToolItem = styled.span`

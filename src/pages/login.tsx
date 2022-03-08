@@ -1,9 +1,11 @@
 import Head from 'next/head';
 import styled from 'styled-components';
 import { auth, provider } from '../firebaseConfig';
-import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { useAppContext } from '../context/appContext';
 
 const Login = () => {
+  const { updateCurrentUserId } = useAppContext();
+
   const handleSingIn = () => {
     auth
       .signInWithPopup(provider)
@@ -15,7 +17,7 @@ const Login = () => {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
-        console.log(user);
+        updateCurrentUserId(user.email);
       })
       .catch((error) => {
         // Handle Errors here.
@@ -36,7 +38,6 @@ const Login = () => {
       </Head>
 
       <LoginContainer>
-        {/* <Logo src='https://i.imgur.com/IQR9GSI.png' /> */}
         <Logo src='https://logodownload.org/wp-content/uploads/2019/08/wechat-logo-4.png' />
         <Button onClick={handleSingIn}>SIGN IN WITH GOOGLE</Button>
       </LoginContainer>

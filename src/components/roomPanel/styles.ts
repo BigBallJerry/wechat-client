@@ -63,6 +63,25 @@ export const ChatRoomContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #e0dfde;
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      .active {
+        background-color: #480048;
+      }
+    }
+  }
+
+  ::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 `;
 
 export const ChatIcon = styled.img``;

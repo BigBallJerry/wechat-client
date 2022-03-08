@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+interface ContainerProps {
+  selected: boolean;
+}
+
+export const Container = styled.div<ContainerProps>`
   position: relative;
   padding-left: 3rem;
   height: 4rem;
@@ -13,24 +17,22 @@ export const Container = styled.div`
   transition: transform 500ms;
   cursor: pointer;
 
+  :hover {
+    background-color: #c9d1d1;
+  }
+
+  :last-child {
+    margin-bottom: 0;
+  }
+
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 
-  :last-child {
-    margin-bottom: 0;
-  }
-
-  :hover {
-    background-color: #d4d2d1;
-  }
-
-  :focus {
-    /* background-color: #c9c8c7; */
-    outline: 1px solid blue;
-  }
+  background-color: ${(props) =>
+    props.selected ? props.theme.colors.chatRoomItem.selectedBgColor : props.theme.colors.chatRoom.bgColor};
 `;
 
 export const Avatar = styled.div`
@@ -97,10 +99,3 @@ export const LatestMessage = styled.span`
   text-align: left;
   text-overflow: ellipsis;
 `;
-
-// $text-1: #333;
-// $text-2: #666;
-// $text-3: #999;
-// $line: #CCC;
-// $time-bg: #EEE;
-// $background: #F7F7F7;

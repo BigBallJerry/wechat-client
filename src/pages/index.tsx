@@ -1,12 +1,22 @@
 import { NextPage } from 'next';
-import { useState, useRef } from 'react';
+import Head from 'next/head';
+import { useState, useRef, useContext } from 'react';
 import { Grid, Cell } from 'styled-css-grid';
+import { WeChatLayout } from '../components/layout/WeChatLayout';
 import styled from 'styled-components';
 import { Sidebar } from '../components/sidebar/Sidebar';
 import { RoomPanel } from '../components/roomPanel/RoomPanel';
 import { ChatPanel } from '../components/chatPanel/ChatPanel';
 import { WindowToolbar } from '../components/windowToolbar/WindowToolbar';
-import log from '../utils/logger';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth, db } from '../firebaseConfig';
+
+import { useAppContext } from '../context/appContext';
+import Login from './login';
+import getRecipientEmail from '../utils/getRecipientEmail';
+import { useFirestoreQuery } from '../hooks/useFirestoreQuery';
+
+import { ThemeContext } from 'styled-components';
 
 const LeftContainer = styled.div`
   width: 35%;
@@ -34,6 +44,9 @@ const LoginForm = styled.div`
 const Home: NextPage = () => {
   const usernameRef = useRef(null);
   const [username, setUsername] = useState('user');
+  const [user] = useAuthState(auth);
+
+  const { currentUserId, updateCurrentUserId, currentChatId, updateCurrentChatId } = useAppContext();
 
   const handleSetUsername = () => {
     const value = usernameRef.current.value;
@@ -46,40 +59,64 @@ const Home: NextPage = () => {
     localStorage.setItem('username', value);
   };
 
-  let date: Date = new Date();
+  if (!user) return <Login />;
 
-  const [userInfo, setUserInfo] = useState({
-    username: 'BigBallJerry',
-    socketId: 'zRQ3PKd2pNG9YBd-AABV',
-    avatar:
-      'https://avataaars.io/?avatarStyle=Circle&topType=LongHairFroBand&accessoriesType=Sunglasses&hairColor=Black&facialHairType=MoustacheFancy&facialHairColor=Blonde&clotheType=CollarSweater&clotheColor=Gray01&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light',
-    password: '123456',
-    confirmationToken: null,
-    createdAt: date,
-  });
+  console.log(`(Home) user : ${user.email}`);
+  const chatsQuery = db.collection('chats').where('users', 'array-contains', user?.email);
+  const chats = useFirestoreQuery(chatsQuery);
+  console.log(chatsQuery, chats);
+
+  const themeContext = useContext(ThemeContext);
 
   return (
     <>
-      {username && (
-        <>
-          <WindowToolbar />
-          <LeftContainer>
-            <Grid columns={5} gap='0px' height='100%'>
-              <Cell width={1}>
-                <Sidebar username={userInfo.username} avatar={userInfo.avatar} badge={20} />
-              </Cell>
-              <Cell width={4}>
-                <RoomPanel />
-              </Cell>
-            </Grid>
-          </LeftContainer>
-          <RightContainer>
-            <ChatPanel />
-          </RightContainer>
-        </>
-      )}
+      <WeChatLayout>
+        <Head>
+          <title>WeChat Demo</title>
+        </Head>
+        <WindowToolbar />
+        <LeftContainer>
+          <Grid columns={5} gap='0px' height='100%'>
+            <Cell width={1}>
+              <Sidebar username={user.email} avatar={user.photoURL} badge={20} />
+            </Cell>
+            <Cell width={4}>
+              <RoomPanel chats={chats} />
+            </Cell>
+          </Grid>
+        </LeftContainer>
+        <RightContainer>
+          <ChatPanel bgColor={themeContext.colors.chatPanelColor} />
+        </RightContainer>
+      </WeChatLayout>
     </>
   );
 };
 
 export default Home;
+
+// export async function getServerSideProps(context) {
+//   const ref = db.collection('chats').doc('UaV8muHrPiXObQUDqd3i');
+//   //const ref = db.collection('chats').doc(context.query.id);
+
+//   const messagesRes = await ref.collection('messages').orderBy('timestamp', 'asc').get();
+
+//   const messages = messagesRes.docs
+//     .map((doc) => ({ id: doc.id, ...doc.data() }))
+//     .map((messages) => ({ ...messages, timestamp: messages.timestamp.toDate().getTime() }));
+
+//   const chatRes = await ref.get();
+//   const chat = {
+//     id: chatRes.id,
+//     ...chatRes.data(),
+//   };
+
+//   console.log(chat);
+
+//   return {
+//     props: {
+//       messages: JSON.stringify(messages),
+//       chat: chat,
+//     },
+//   };
+// }

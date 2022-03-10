@@ -12,6 +12,7 @@ export const theme = {
     },
     chatRoom: {
       bgColor: '#e0dfde',
+      spinnerColor: '#02de6d',
     },
   },
 };

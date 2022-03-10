@@ -23,8 +23,8 @@ type Props = {
 };
 
 const AppContextProvider = ({ children }: Props) => {
-  const [userId, setUserId] = useState<string>('');
-  const [chatId, setChatId] = useState<string>('');
+  const [userId, setUserId] = useState<string>('dummy');
+  const [chatId, setChatId] = useState<string>('dummy');
 
   return (
     <>

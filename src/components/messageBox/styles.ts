@@ -1,9 +1,23 @@
 import styled from 'styled-components';
+import { keyframes } from 'styled-components';
+import AvatarById from '../avatarById/AvatarById';
+
+const motion = (props) => keyframes`
+  0% {
+    opacity: 0; 
+    transform: translateY(0rem);
+  }
+
+  100% {
+    opacity: 1; 
+    transform: translateY(10px);
+  }
+`;
 
 const MessageContainer = styled.div`
   padding: 1rem 0 0 0;
   transition: all 0.15s ease-in-out;
-  animation: fadeNewMessage 0.5s;
+  animation: motion 0.5s;
   animation-fill-mode: forwards;
 `;
 
@@ -21,20 +35,20 @@ export const Avatar = styled.img`
 `;
 
 export const MessageItemLeft = styled(MessageContainer)`
-  ${Avatar} {
+  ${AvatarById} {
     float: left;
   }
 `;
 
 export const MessageItemRight = styled(MessageContainer)`
-  ${Avatar} {
+  ${AvatarById} {
     float: right;
   }
 `;
 
 export const MessageContent = styled.div`
   position: relative;
-  max-width: 60%;
+  max-width: 50%;
   min-height: 40px;
   padding: 0.75rem;
   border-radius: 4px;

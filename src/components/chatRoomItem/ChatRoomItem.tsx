@@ -34,7 +34,7 @@ const ChatRoomItem = ({ chatId, badge, selected, users, name, theme, latestMessa
         {recipient ? (
           <img src={recipient?.photoURL} alt='avatar' width='48' height='48' />
         ) : (
-          <LetterAvatar avatar={recipientEmail[0]} width='48px' height='48px' />
+          <LetterAvatar avatar={recipientEmail[0]} size={48} />
         )}
       </Avatar>
       {badge && <Badge>{badge}</Badge>}

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Container } from './styles';
 
-type Props = { color: string };
+type Props = { color: string; size?: number; sizeUnit?: string };
 
-const CircleSpinner = (props: Props) => {
+const CircleSpinner = ({ color = 'blue', size = 48, sizeUnit = 'px' }: Props) => {
   return (
-    <Container color={props.color}>
+    <Container color={color} size={size} sizeUnit={sizeUnit}>
       <div></div>
       <div></div>
       <div></div>

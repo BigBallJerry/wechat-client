@@ -3,9 +3,11 @@ import { keyframes } from 'styled-components';
 
 export interface CircleSpinnerProps {
   color: string;
+  size?: number;
+  sizeUnit?: string;
 }
 
-const rotate = keyframes`
+const motion = (props) => keyframes`
   0% {
     transform: rotate(0deg);
   }
@@ -18,94 +20,94 @@ const rotate = keyframes`
 export const Container = styled.div<CircleSpinnerProps>`
   display: inline-block;
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: ${(props) => `${props.size}${props.sizeUnit}`};
+  height: ${(props) => `${props.size}${props.sizeUnit}`};
 
   div {
-    animation: ${rotate} 3s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    transform-origin: 40px 40px;
+    animation: ${(props) => motion(props)} 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    transform-origin: 32px 32px;
+  }
 
-    :nth-child(1) {
-      animation-delay: -0.036s;
+  div:nth-child(1) {
+    animation-delay: -0.036s;
+  }
 
-      :after {
-        top: 63px;
-        left: 63px;
-      }
-    }
+  div:nth-child(1):after {
+    top: 50px;
+    left: 50px;
+  }
 
-    :nth-child(2) {
-      animation-delay: -0.072s;
+  div:nth-child(2) {
+    animation-delay: -0.072s;
+  }
 
-      :after {
-        top: 68px;
-        left: 56px;
-      }
-    }
+  div:nth-child(2):after {
+    top: 54px;
+    left: 45px;
+  }
 
-    :nth-child(3) {
-      animation-delay: -0.108s;
+  div:nth-child(3) {
+    animation-delay: -0.108s;
+  }
 
-      :after {
-        top: 71px;
-        left: 48px;
-      }
-    }
+  div:nth-child(3):after {
+    top: 57px;
+    left: 39px;
+  }
 
-    :nth-child(4) {
-      animation-delay: -0.144s;
+  div:nth-child(4) {
+    animation-delay: -0.144s;
+  }
 
-      :after {
-        top: 72px;
-        left: 40px;
-      }
-    }
+  div:nth-child(4):after {
+    top: 58px;
+    left: 32px;
+  }
 
-    :nth-child(5) {
-      animation-delay: -0.18s;
+  div:nth-child(5) {
+    animation-delay: -0.18s;
+  }
 
-      :after {
-        top: 71px;
-        left: 32px;
-      }
-    }
+  div:nth-child(5):after {
+    top: 57px;
+    left: 25px;
+  }
 
-    :nth-child(6) {
-      animation-delay: -0.216s;
+  div:nth-child(6) {
+    animation-delay: -0.216s;
+  }
 
-      :after {
-        top: 68px;
-        left: 24px;
-      }
-    }
+  div:nth-child(6):after {
+    top: 54px;
+    left: 19px;
+  }
 
-    :nth-child(7) {
-      animation-delay: -0.252s;
+  div:nth-child(7) {
+    animation-delay: -0.252s;
+  }
 
-      :after {
-        top: 63px;
-        left: 17px;
-      }
-    }
+  div:nth-child(7):after {
+    top: 50px;
+    left: 14px;
+  }
 
-    :nth-child(8) {
-      animation-delay: -0.288s;
+  div:nth-child(8) {
+    animation-delay: -0.288s;
+  }
 
-      :after {
-        top: 56px;
-        left: 12px;
-      }
-    }
+  div:nth-child(8):after {
+    top: 45px;
+    left: 10px;
+  }
 
-    :after {
-      content: ' ';
-      display: block;
-      position: absolute;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: ${(props) => props.color};
-      margin: -4px 0 0 -4px;
-    }
+  div:after {
+    content: ' ';
+    display: block;
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: ${(props) => props.color};
+    margin: -3px 0 0 -3px;
   }
 `;

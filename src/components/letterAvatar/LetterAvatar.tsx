@@ -1,15 +1,15 @@
 import { Container, AvatarLetters } from './styles';
 
 type Props = {
-  width?: string;
-  height?: string;
+  size?: number;
   avatar?: string;
+  sizeUnit?: string;
 };
 
-const LetterAvatar = (props: Props) => {
+const LetterAvatar = ({ size, avatar, sizeUnit = 'px' }: Props) => {
   return (
-    <Container width={props.width} height={props.height}>
-      <AvatarLetters>{props.avatar}</AvatarLetters>
+    <Container size={size} sizeUnit={sizeUnit}>
+      <AvatarLetters>{avatar}</AvatarLetters>
     </Container>
   );
 };

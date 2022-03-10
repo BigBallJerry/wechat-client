@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
-import { useState, useRef, useContext } from 'react';
+import { useState, useRef, useContext, useEffect } from 'react';
 import { Grid, Cell } from 'styled-css-grid';
 import { WeChatLayout } from '../components/layout/WeChatLayout';
 import styled from 'styled-components';
@@ -61,7 +61,11 @@ const Home: NextPage = () => {
 
   if (!user) return <Login />;
 
-  console.log(`(Home) user : ${user.email}`);
+  useEffect(() => {
+    updateCurrentUserId(user.email);
+    console.log(`(Home) currentUserId : ${currentUserId}`);
+  }, [user]);
+
   const chatsQuery = db.collection('chats').where('users', 'array-contains', user?.email);
   const chats = useFirestoreQuery(chatsQuery);
   console.log(chatsQuery, chats);

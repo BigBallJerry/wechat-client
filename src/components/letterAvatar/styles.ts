@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 type LetterAvatarProps = {
-  width?: string;
-  height?: string;
+  size?: string;
+  sizeUnit?: string;
 };
 
 export const AvatarLetters = styled.div`
@@ -17,8 +17,8 @@ export const AvatarLetters = styled.div`
 `;
 
 export const Container = styled.div<LetterAvatarProps>`
-  width: ${(props) => (props.width ? props.width : '4rem')};
-  height: ${(props) => (props.height ? props.height : '4rem')};
+  width: ${(props) => (props.size ? `${props.size}${props.sizeUnit}` : '4rem')};
+  height: ${(props) => (props.size ? `${props.size}${props.sizeUnit}` : '4rem')};
   display: inline-block;
   vertical-align: middle;
   position: relative;

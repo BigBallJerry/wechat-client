@@ -11,6 +11,7 @@ import {
 } from './styles';
 import dynamic from 'next/dynamic';
 import { auth } from '../../firebaseConfig';
+import { signOut } from 'firebase/auth';
 
 const ReactTooltip = dynamic(() => import('react-tooltip'), {
   ssr: false,
@@ -19,7 +20,7 @@ const ReactTooltip = dynamic(() => import('react-tooltip'), {
 type SidebarProps = {
   username: string;
   avatar: string | null;
-  badge: number | null;
+  badge?: number | null;
 };
 
 export const Sidebar = ({ avatar, badge }: SidebarProps) => {
@@ -35,14 +36,10 @@ export const Sidebar = ({ avatar, badge }: SidebarProps) => {
     console.log('handleMessageClick');
   };
 
-  const handleAvatarClick = () => {
-    auth.signOut();
-  };
-
   return (
     <SidebarContainer>
       <UserPanel>
-        <Avatar src={avatar} onClick={handleAvatarClick}></Avatar>
+        <Avatar src={avatar} onClick={(e) => signOut(auth)}></Avatar>
         <ToolItem onClick={() => handleMessageClick()}>
           <MessagesIcon size='25' data-tip data-for='messageTip' />
           {badge && <Badge>{badge}</Badge>}

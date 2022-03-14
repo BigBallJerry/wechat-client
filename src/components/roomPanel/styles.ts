@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Wechat } from '@styled-icons/remix-line/Wechat';
 import { PlusSquareFill } from '@styled-icons/bootstrap/PlusSquareFill';
+import { Search } from '@styled-icons/bootstrap/Search';
 
 export const RoomPanelContainer = styled.div`
   width: 100%;
@@ -12,7 +13,7 @@ export const RoomPanelContainer = styled.div`
 
 export const Header = styled.div`
   width: 100%;
-  height: 60px;
+  height: 4rem;
   background-color: #f7f7f7;
   display: flex;
   align-items: center;
@@ -92,4 +93,8 @@ export const GroupChatIcon = styled(Wechat)`
 
 export const ChatRoomTitle = styled.span`
   font-size: 14px;
+`;
+
+export const SearchIcon = styled(Search)`
+  color: ;
 `;

@@ -1,27 +1,48 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Container,
   Toolbox,
   ToolItem,
   EmojiIcon,
   SendImageIcon,
-  VoiceMessageIcon,
+  EmojiContainer,
   TextEditor,
   SendButton,
   Button,
 } from './styles';
 import dynamic from 'next/dynamic';
+import { useStore } from '../../store';
+import { db } from '../../firebaseConfig';
+import { collection, doc, setDoc, addDoc, serverTimestamp } from 'firebase/firestore';
+import 'emoji-mart/css/emoji-mart.css';
+import { Picker } from 'emoji-mart';
 
 const ReactTooltip = dynamic(() => import('react-tooltip'), {
   ssr: false,
 });
 
-const MessageEditor = (props) => {
-  const messages = props.messages;
+const MessageEditor = () => {
+  const currentUser = useStore((state) => state.currentUser);
+  const currentChatId = useStore((state) => state.currentChatId);
+  const [disabled, setDisabled] = useState(true);
 
-  const [text, setText] = useState('');
+  useEffect(() => {
+    if (typeof currentChatId != 'undefined') setDisabled(false);
+  }, [currentChatId == 'undefined' || currentChatId == null]);
 
-  const handleEmojiClick = () => {
+  const [messageText, setMessageText] = useState('');
+  const [showEmoji, setShowEmoji] = useState(false);
+
+  const handleEmojiClick = (event) => {
+    event.preventDefault();
+    setShowEmoji(!showEmoji);
+
+    if (showEmoji) {
+      document.getElementById('textField').focus();
+    } else {
+      document.getElementById('textField').blur();
+    }
+
     console.log('handleEmojiClick');
   };
 
@@ -33,81 +54,88 @@ const MessageEditor = (props) => {
     console.log('handleVoiceChatClick');
   };
 
-  const handleSendMsg = () => {
-    /*
-    const {current, username, avatar, handleMsg} = this.props
-    const {type} = this.state
-    if (!current) {
-        message.info("请选择发送对象")
-        return
-    }
-    if (type !== "text") {
-        if (type === "file") {
-            this.handleSendFile()
-        }
-        return
-    }
-    // 如果没有消息
-    if (this.text.current.value.trim() === "") {
-        message.info("消息不能为空")
-        this.clearMsg()
-        return
-    }
+  const handleSendMsg = (e) => {
+    e.preventDefault();
 
-    // 将信息添加到父组件的state中
-    handleMsg(Msg("send", username, avatar, TEXT, this.text.current.value))
+    console.log('handleSendMsg currentChatId=', currentChatId);
+    console.log('handleSendMsg messageText=', messageText);
 
-    // 发送数据
-    if (this.state.type === "text") {
-        // 如果是群聊，那么isGroup为true，服务端进行判断然后发送
-        // 对于他人来说应该是receive
-        let msg_ = Msg("receive", username, avatar, TEXT, this.text.current.value)
-        if (isGroup(current)) {
-            socket.emit(MSG, {isGroup: true, data: {user: current, msg: msg_}})
-        } else {
-            socket.emit(MSG, {isGroup: false, data: {user: current, msg: msg_}})
-        }
-    }
+    if (!messageText.trim()) return;
 
-    this.clearMsg()
-    */
+    const docRef = addDoc(collection(db, 'chats', currentChatId as string, 'messages'), {
+      type: 'text',
+      emoji: '',
+      image: '',
+      sentAt: serverTimestamp(),
+      sentBy: currentUser.email,
+      text: messageText.trim(),
+    }).then((ref) => {
+      console.log('New message created, ', ref.id);
+    });
+
+    setDoc(doc(db, 'users', currentUser.uid), { lastSeen: serverTimestamp() }, { merge: true });
+
+    setMessageText('');
+    //scrollToBottom();
   };
 
-  const handleKeyDown = (event) => {
-    if (event.ctrlKey && event.keyCode === 13) {
-      handleSendMsg();
+  const handleKeyDown = (e) => {
+    if (e.ctrlKey && e.keyCode === 13) {
+      handleSendMsg(e);
       console.log('Entry key down');
     }
   };
 
-  const handleTextChange = (event) => {
-    setText(event.target.value);
+  const handleTextChange = (text) => {
+    console.log('handleTextChange = ', text);
+    setMessageText(text);
+  };
+
+  const addEmoji = (e) => {
+    const emoji = e.native;
+    setMessageText(messageText + emoji);
+    setShowEmoji(!showEmoji);
+    document.getElementById('textField').focus();
+    console.log('typed', messageText);
   };
 
   return (
-    <Container>
+    <Container disabled={disabled}>
       <Toolbox>
-        <ToolItem onClick={() => handleEmojiClick()}>
+        <ToolItem onClick={handleEmojiClick}>
           <EmojiIcon size='25' data-tip data-for='emojiTip' />
           <ReactTooltip id='emojiTip' place='bottom' effect='solid' type='info'>
             Emoji
           </ReactTooltip>
         </ToolItem>
-        <ToolItem onClick={() => handleSendFileClick()}>
+        <ToolItem onClick={handleSendFileClick}>
           <SendImageIcon size='25' data-tip data-for='sendFileTip' />
           <ReactTooltip id='sendFileTip' place='bottom' effect='solid' type='info'>
             Send picture
           </ReactTooltip>
         </ToolItem>
-        <ToolItem onClick={() => handleVoiceChatClick()}>
-          <VoiceMessageIcon size='25' data-tip data-for='voiceChatTip' />
-          <ReactTooltip id='voiceChatTip' place='bottom' effect='solid' type='info'>
-            Voice call
-          </ReactTooltip>
-        </ToolItem>
+        {showEmoji && (
+          <EmojiContainer>
+            <Picker
+              title='Pick your emoji . . . '
+              set='apple'
+              emoji='point_up'
+              onSelect={addEmoji}
+              showPreview={false}
+              autoFocus={true}
+              style={{ position: 'absolute', bottom: '20px', right: '20px', overflowY: 'auto' }}
+            />
+          </EmojiContainer>
+        )}
       </Toolbox>
       <TextEditor>
-        <textarea placeholder='Say hello ...' onKeyDown={handleKeyDown} onChange={handleTextChange}></textarea>
+        <textarea
+          id='textField'
+          placeholder='Say hello ...'
+          onKeyDown={handleKeyDown}
+          onChange={(event) => handleTextChange(event.target.value)}
+          value={messageText}
+        ></textarea>
       </TextEditor>
       <SendButton className={'chat-room-message-editor-btn'}>
         <Button onClick={handleSendMsg}>Send</Button>

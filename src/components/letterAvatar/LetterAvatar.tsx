@@ -7,6 +7,7 @@ type Props = {
 };
 
 const LetterAvatar = ({ size, avatar, sizeUnit = 'px' }: Props) => {
+  console.log(`LetterAvatar size=${size}`);
   return (
     <Container size={size} sizeUnit={sizeUnit}>
       <AvatarLetters>{avatar}</AvatarLetters>

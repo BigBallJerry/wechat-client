@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 type LetterAvatarProps = {
-  size?: string;
+  size?: number;
   sizeUnit?: string;
 };
 

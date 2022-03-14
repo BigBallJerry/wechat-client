@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { CollectionReference, DocumentData, Query } from 'firebase/firestore';
 
 export function useFirestoreQuery(query: CollectionReference | Query<DocumentData>) {
-  const [docs, setDocs] = useState([]);
+  const [docs, setDocs] = useState(null);
 
   // Store current query in ref
   const queryRef = useRef(query);

@@ -3,11 +3,22 @@ import { EmojiSmile } from '@styled-icons/bootstrap/EmojiSmile';
 import { Image } from '@styled-icons/bootstrap/Image';
 import { MicNone } from '@styled-icons/material/MicNone';
 
-export const Container = styled.div`
+interface ContainerProps {
+  disabled: boolean;
+}
+
+export const Container = styled.div<ContainerProps>`
   width: 100%;
   height: calc(100% - 460px);
   position: relative;
   background-color: #fff;
+
+  ${(props) =>
+    props.disabled == true &&
+    `
+      pointer-events: none;
+      user-select: none;
+    `}
 `;
 
 export const FilePreviewer = styled.div``;
@@ -93,4 +104,12 @@ export const TextEditor = styled.div`
     width: 100%;
     height: 100%;
   }
+`;
+
+export const EmojiContainer = styled.div`
+  width: 100%;
+  height: 400px;
+  overflow: none;
+  z-index: 100;
+  display: block;
 `;

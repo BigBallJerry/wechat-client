@@ -81,8 +81,11 @@ export const Name = styled.span`
   margin-top: 0.1rem;
   height: 1.2rem;
   font-size: 0.9rem;
+  color: black;
   clear: both;
   display: inline-block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export const LatestMessage = styled.span`

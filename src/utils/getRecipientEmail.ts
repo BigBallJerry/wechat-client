@@ -1,11 +1,12 @@
 import React from 'react';
+import { User } from 'firebase/auth';
 
 export type recipientProps = {
-  users: any[];
-  currentUser: any;
+  users: User[];
+  currentUser: User;
 };
 
-const getRecipientEmail = (users, currentUser): recipientProps =>
-  users?.filter((userToFilter) => userToFilter !== currentUser?.email)[0];
+const getRecipientEmail = (users, userLoggedIn): string =>
+  users?.filter((userToFilter) => userToFilter !== userLoggedIn?.email)[0];
 
 export default getRecipientEmail;

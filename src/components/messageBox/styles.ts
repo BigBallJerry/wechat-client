@@ -21,27 +21,19 @@ const MessageContainer = styled.div`
   animation-fill-mode: forwards;
 `;
 
-export const Avatar = styled.img`
+export const AvatarContainer = styled.div`
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  image-rendering: -webkit-optimize-contrast;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 `;
 
 export const MessageItemLeft = styled(MessageContainer)`
-  ${AvatarById} {
+  ${AvatarContainer} {
     float: left;
   }
 `;
 
 export const MessageItemRight = styled(MessageContainer)`
-  ${AvatarById} {
+  ${AvatarContainer} {
     float: right;
   }
 `;
@@ -57,6 +49,7 @@ export const MessageContent = styled.div`
   font-weight: 500;
   box-shadow: 0px 10px 10px -8px rgba(0, 0, 0, 0.08);
   box-sizing: border-box;
+  text-align: left;
 `;
 
 export const MessageContentLeft = styled(MessageContent)`
@@ -88,8 +81,6 @@ export const MessageContentLeft = styled(MessageContent)`
 `;
 
 export const MessageContentRight = styled(MessageContent)`
-  float: right;
-  text-align: right;
   margin: 0 1rem 0 0;
   background-color: #9eea6a;
 
@@ -112,4 +103,28 @@ export const MessageContentRight = styled(MessageContent)`
       color: #007dd1;
     }
   }
+`;
+
+export const TimeSpanLeft = styled.h6`
+  margin: 0.5rem 1rem;
+  text-align: left;
+`;
+
+export const TimeSpanRight = styled.h6`
+  margin: 0.5rem 1rem;
+  text-align: right;
+`;
+
+export const TextContainerLeft = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+export const TextContainerRight = styled.div`
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  justify-content: center;
+  align-items: flex-end;
 `;

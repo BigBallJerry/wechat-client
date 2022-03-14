@@ -1,35 +1,29 @@
+import { useState } from 'react';
 import Head from 'next/head';
 import styled from 'styled-components';
 import { auth, provider } from '../firebaseConfig';
 import { useAppContext } from '../context/appContext';
+import { signInWithPopup } from 'firebase/auth';
+import { useStore } from '../store';
 
 const Login = () => {
-  const { updateCurrentUserId } = useAppContext();
+  const currentUser = useStore((state) => state.currentUser);
+  const [error, setError] = useState('');
 
   const handleSingIn = () => {
-    auth
-      .signInWithPopup(provider)
+    signInWithPopup(auth, provider)
       .then((result) => {
         /** @type {firebase.auth.OAuthCredential} */
-        const credential = result.credential;
-
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const token = credential.accessToken;
         // The signed-in user info.
-        const user = result.user;
-        updateCurrentUserId(user.email);
+        console.log('signInWithPopup', result.user);
       })
       .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        const credential = error.credential;
-        // ...
+        setError(`Error: ${err.code}`);
       });
   };
+
+  //return if has signed in
+  if (currentUser) return null;
 
   return (
     <Container>
@@ -39,7 +33,7 @@ const Login = () => {
 
       <LoginContainer>
         <Logo src='https://logodownload.org/wp-content/uploads/2019/08/wechat-logo-4.png' />
-        <Button onClick={handleSingIn}>SIGN IN WITH GOOGLE</Button>
+        <Button onClick={(e) => handleSingIn()}>SIGN IN WITH GOOGLE</Button>
       </LoginContainer>
     </Container>
   );

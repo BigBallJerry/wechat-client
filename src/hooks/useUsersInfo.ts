@@ -12,19 +12,22 @@ export const useUsersInfo = (userIds: string[]) => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (!userIds) {
+    if (!userIds || userIds.length === 0 || typeof userIds === 'undefined') {
+      console.log('useUsersInfo empty userIds');
+      console.log(userIds);
       return null;
     }
 
     try {
-      console.log('uid=', userIds);
+      console.log('useUsersInfo uid=', userIds, cache);
       (async () => {
         const response = await Promise.all(
           userIds.map(async (id) => {
             if (cache[id]) return cache[id];
-
-            const res = await getDoc(doc(db, 'users', id));
-            cache[id] = res;
+            const docRef = doc(db, 'users', id);
+            const res = await getDoc(docRef);
+            cache[id] = res.data();
+            console.log('useUsersInfo::useEffect::fetedUserInfo=', res.data());
             return res.data();
           })
         );

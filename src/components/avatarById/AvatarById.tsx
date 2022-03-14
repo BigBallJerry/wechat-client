@@ -22,32 +22,31 @@ export const Avatar = styled.img`
   user-select: none;
 `;
 
-const AvatarById: FC<AvatarProps> = ({ uid, size = 24 }) => {
+const AvatarById = ({ uid, size = 40 }: AvatarProps) => {
+  if (typeof uid == 'undefined') {
+    console.log('AvatarById got undefined');
+    return null;
+  }
+
   const { data, loading, error } = useUsersInfo([uid]);
 
   if (loading) {
-    return <CircleSpinner color='#02de6d' size={size} />;
+    console.log('AvatarById loading');
   }
 
   if (error) {
-    console.log('AvatarById error', uid[0]);
-    return <LetterAvatar avatar={uid[0]} size={size} />;
+    console.log('AvatarById error', uid);
   }
 
-  // console.log(`AvatarById uid = ${uid}`);
-  // console.log(data?.[0].data()?.photoURL);
-  // console.log('');
-
-  console.log(`AvatarById uid=${uid}`, data);
+  console.log(`AvatarById uid=${uid}`, data?.[0]?.photoUrl);
+  console.log(data);
 
   return (
-    // <img
-    //   title={data?.[0].data()?.displayName}
-    //   style={{ width: size, height: size }}
-    //   className='rounded-full object-cover'
-    //   src={data?.[0].data()?.photoURL}
-    // />
-    <Avatar src={data?.[0]?.photoUrl} />
+    <>
+      {error && <strong>Error: {JSON.stringify(error)}</strong>}
+      {loading && <CircleSpinner color='#02de6d' size={20} />}
+      {data && (data?.[0] ? <Avatar src={data?.[0]?.photoUrl} /> : <LetterAvatar avatar={uid[0]} size={size} />)}
+    </>
   );
 
   return <div>AvatarById</div>;

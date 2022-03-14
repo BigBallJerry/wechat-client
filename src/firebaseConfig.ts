@@ -1,6 +1,7 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
+import { getStorage } from 'firebase/storage';
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -13,13 +14,12 @@ const firebaseConfig = {
   measurementId: 'G-MT5WEXJ5B8',
 };
 
-const firebaseApp = firebase.initializeApp(firebaseConfig);
+const firebaseApp = initializeApp(firebaseConfig);
 
-const db = firebaseApp.firestore();
-const auth = firebaseApp.auth();
-
-const provider = new firebase.auth.GoogleAuthProvider();
-provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+const auth = getAuth(firebaseApp);
+const db = getFirestore(firebaseApp);
+const storage = getStorage(firebaseApp);
+const provider = new GoogleAuthProvider();
 
 // signInWithPopup(auth, provider)
 //   .then((result) => {
@@ -41,4 +41,4 @@ provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 //     // ...
 //   });
 
-export { db, auth, provider };
+export { db, auth, storage, provider };

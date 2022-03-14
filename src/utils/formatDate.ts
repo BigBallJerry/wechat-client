@@ -1,15 +1,15 @@
 import dayjs from 'dayjs';
 
-export const formatDate = (timestamp: number) => {
-  const date = new Date(timestamp);
-  const formatter = dayjs(date);
-  const now = new Date();
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 
-  if (dayjs().isSame(formatter, 'date')) return formatter.format('h:mm A');
+export const formatDateInTimeAgo = (timestamp: number): string => {
+  const sentDate = dayjs(timestamp);
+  const now = dayjs();
 
-  if (dayjs().isSame(formatter, 'week')) return formatter.format('ddd h:mm A');
+  console.log('formatDateInTimeAgo timestamp=', timestamp);
+  console.log('Total Duration:', now.diff(sentDate, 'second', true));
+  console.log('now:', dayjs(sentDate).fromNow());
 
-  if (now.getFullYear() === date.getFullYear()) return formatter.format('MMM DD h:mm A');
-
-  return formatter.format('DD MMM YYYY h:mm A');
+  return dayjs(timestamp).fromNow();
 };
